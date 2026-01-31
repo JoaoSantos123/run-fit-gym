@@ -14,9 +14,14 @@ export default function IdentityHashRedirect() {
       hash.includes("invite_token=") ||
       hash.includes("confirmation_token=");
 
+    console.log("[IdentityHashRedirect] path:", window.location.pathname);
+    console.log("[IdentityHashRedirect] hash:", hash);
+
     if (hasIdentityToken) {
       // manda para /admin preservando o hash (o token está no hash!)
-      window.location.replace(`/admin/${hash}`);
+      const target = `/admin/${hash}`;
+      console.log("[IdentityHashRedirect] redirecting to:", target);
+      window.location.replace(target);
     }
   }, []);
 

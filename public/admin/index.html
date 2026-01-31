@@ -16,16 +16,43 @@
 
     <!-- Força abertura do Identity se não estiver logado -->
     <script>
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", () => {
+        (function () {
+            console.log("[Admin] index.html loaded");
+            console.log("[Admin] location:", window.location.pathname, window.location.hash);
+
+            function openIfRecovery() {
                 const hash = window.location.hash || "";
                 const hasRecovery = hash.includes("recovery_token=");
+                console.log("[Admin] hasRecovery:", hasRecovery, "hash:", hash);
                 if (hasRecovery) {
                     // abre o modal; o widget deteta recovery automaticamente via hash
                     window.netlifyIdentity.open();
                 }
-            });
-        }
+            }
+
+            function attachIdentityHandlers() {
+                window.netlifyIdentity.on("init", () => {
+                    console.log("[Admin] netlifyIdentity init");
+                    openIfRecovery();
+                });
+                window.netlifyIdentity.init();
+            }
+
+            function waitForIdentityWidget(attemptsLeft) {
+                if (window.netlifyIdentity) {
+                    console.log("[Admin] netlifyIdentity available");
+                    attachIdentityHandlers();
+                    return;
+                }
+                if (attemptsLeft <= 0) {
+                    console.warn("[Admin] netlifyIdentity not available");
+                    return;
+                }
+                setTimeout(() => waitForIdentityWidget(attemptsLeft - 1), 50);
+            }
+
+            waitForIdentityWidget(100);
+        })();
     </script>
 
 </body>
