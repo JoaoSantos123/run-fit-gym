@@ -1,45 +1,47 @@
-backend:
-  name: git-gateway
-  branch: main
-
-publish_mode: simple
-
-media_folder: "public/uploads"
-public_folder: "/uploads"
-
 collections:
-  - name: "schedule"
-    label: "Horários"
-    files:
-      - name: "weekly_schedule"
-        label: "Horário Semanal"
-        file: "content/schedule.json"
-        format: "json"
+  - name: "schedules"
+    label: "Horários (por período)"
+    folder: "content/schedules"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    fields:
+      - { label: "Título do período", name: "periodTitle", widget: "string" }
+      - { label: "Data início", name: "startDate", widget: "datetime", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Data fim", name: "endDate", widget: "datetime", time_format: false, format: "YYYY-MM-DD" }
+
+      - label: "Horário de funcionamento"
+        name: "openingHours"
+        widget: "object"
         fields:
-          - label: "Aulas"
-            name: "sessions"
-            widget: "list"
-            summary: "{{fields.title}} — {{fields.start}}"
-            fields:
-              - { label: "ID", name: "id", widget: "string" }
-              - { label: "Título", name: "title", widget: "string" }
-              - { label: "Treinador", name: "coach", widget: "string", required: false }
-              - label: "Dia da semana"
-                name: "dow"
-                widget: "select"
-                options:
-                  - { label: "Domingo", value: 0 }
-                  - { label: "Segunda", value: 1 }
-                  - { label: "Terça", value: 2 }
-                  - { label: "Quarta", value: 3 }
-                  - { label: "Quinta", value: 4 }
-                  - { label: "Sexta", value: 5 }
-                  - { label: "Sábado", value: 6 }
-              - { label: "Hora (HH:mm)", name: "start", widget: "string" }
-              - { label: "Duração (min)", name: "durationMin", widget: "number", value_type: "int", min: 15, max: 180 }
-              - { label: "Local", name: "location", widget: "string", required: false }
-              - label: "Tags"
-                name: "tags"
-                widget: "list"
-                required: false
-                field: { label: "Tag", name: "tag", widget: "string" }
+          - { label: "Seg–Sex", name: "weekdays", widget: "string" }
+          - { label: "Sáb/Feriados", name: "saturdayHolidays", widget: "string" }
+          - { label: "Domingo", name: "sunday", widget: "string" }
+
+      - label: "Notas"
+        name: "notes"
+        widget: "list"
+        required: false
+        field: { label: "Nota", name: "note", widget: "string" }
+
+      - label: "Aulas (recorrentes)"
+        name: "sessions"
+        widget: "list"
+        summary: "{{fields.dow}} — {{fields.start}} {{fields.title}}"
+        fields:
+          - { label: "ID", name: "id", widget: "string" }
+          - label: "Dia da semana"
+            name: "dow"
+            widget: "select"
+            options:
+              - { label: "Domingo", value: 0 }
+              - { label: "Segunda", value: 1 }
+              - { label: "Terça", value: 2 }
+              - { label: "Quarta", value: 3 }
+              - { label: "Quinta", value: 4 }
+              - { label: "Sexta", value: 5 }
+              - { label: "Sábado/Feriados", value: 6 }
+          - { label: "Início (HH:mm)", name: "start", widget: "string" }
+          - { label: "Fim (HH:mm)", name: "end", widget: "string" }
+          - { label: "Aula", name: "title", widget: "string" }
+          - { label: "Local", name: "location", widget: "string", required: false }
