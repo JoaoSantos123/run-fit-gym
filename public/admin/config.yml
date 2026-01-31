@@ -1,0 +1,45 @@
+backend:
+  name: git-gateway
+  branch: main
+
+publish_mode: simple
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "schedule"
+    label: "Horários"
+    files:
+      - name: "weekly_schedule"
+        label: "Horário Semanal"
+        file: "content/schedule.json"
+        format: "json"
+        fields:
+          - label: "Aulas"
+            name: "sessions"
+            widget: "list"
+            summary: "{{fields.title}} — {{fields.start}}"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Treinador", name: "coach", widget: "string", required: false }
+              - label: "Dia da semana"
+                name: "dow"
+                widget: "select"
+                options:
+                  - { label: "Domingo", value: 0 }
+                  - { label: "Segunda", value: 1 }
+                  - { label: "Terça", value: 2 }
+                  - { label: "Quarta", value: 3 }
+                  - { label: "Quinta", value: 4 }
+                  - { label: "Sexta", value: 5 }
+                  - { label: "Sábado", value: 6 }
+              - { label: "Hora (HH:mm)", name: "start", widget: "string" }
+              - { label: "Duração (min)", name: "durationMin", widget: "number", value_type: "int", min: 15, max: 180 }
+              - { label: "Local", name: "location", widget: "string", required: false }
+              - label: "Tags"
+                name: "tags"
+                widget: "list"
+                required: false
+                field: { label: "Tag", name: "tag", widget: "string" }

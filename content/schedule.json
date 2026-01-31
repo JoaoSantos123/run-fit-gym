@@ -1,0 +1,14 @@
+{
+  "sessions": [
+    {
+      "id": "mon-corrida-1900",
+      "title": "Corrida (Técnica)",
+      "coach": "Rui",
+      "dow": 1,
+      "start": "19:00",
+      "durationMin": 60,
+      "location": "Box",
+      "tags": ["corrida"]
+    }
+  ]
+}
