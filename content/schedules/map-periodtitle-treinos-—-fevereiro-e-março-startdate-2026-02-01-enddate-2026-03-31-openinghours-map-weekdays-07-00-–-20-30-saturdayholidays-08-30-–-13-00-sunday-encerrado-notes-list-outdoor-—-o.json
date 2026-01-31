@@ -1,0 +1,24 @@
+{
+  "periodTitle": "Treinos — Fevereiro e Março",
+  "startDate": "2026-02-01",
+  "endDate": "2026-03-31",
+  "openingHours": {
+    "weekdays": "07:00 – 20:30",
+    "saturdayHolidays": "08:30 – 13:00",
+    "sunday": "Encerrado"
+  },
+  "notes": [
+    "Outdoor — o local e o material necessário serão anunciados no dia anterior.",
+    "Outdoor — o local e o material necessário serão anunciados no dia anterior."
+  ],
+  "sessions": [
+    {
+      "id": "mon-0600-outdoor-funcional",
+      "dow": 1,
+      "start": "08:00",
+      "end": "08:45",
+      "title": "Pilates",
+      "location": "Active Club"
+    }
+  ]
+}
