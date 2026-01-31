@@ -1,26 +1,33 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Admin</title>
 
     <!-- Netlify Identity (OBRIGATÓRIO) -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
     <!-- Força abertura do Identity se não estiver logado -->
     <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            window.netlifyIdentity.open();
-          }
-        });
-      }
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", () => {
+                const hash = window.location.hash || "";
+                const hasRecovery = hash.includes("recovery_token=");
+                if (hasRecovery) {
+                    // abre o modal; o widget deteta recovery automaticamente via hash
+                    window.netlifyIdentity.open();
+                }
+            });
+        }
     </script>
-  </body>
+
+</body>
+
 </html>
