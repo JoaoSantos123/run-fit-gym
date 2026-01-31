@@ -1,60 +1,44 @@
-<!doctype html>
+ <!doctype html>
 <html>
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Admin</title>
 
-    <!-- Netlify Identity (OBRIGATÓRIO) -->
+    <!-- Netlify Identity widget (required) -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-</head>
-
-<body>
+  </head>
+  <body>
     <!-- Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
-    <!-- Força abertura do Identity se não estiver logado -->
     <script>
-        (function () {
-            console.log("[Admin] index.html loaded");
-            console.log("[Admin] location:", window.location.pathname, window.location.hash);
+      // Debug (remove later)
+      console.log("[admin] loaded", window.location.href);
 
-            function openIfRecovery() {
-                const hash = window.location.hash || "";
-                const hasRecovery = hash.includes("recovery_token=");
-                console.log("[Admin] hasRecovery:", hasRecovery, "hash:", hash);
-                if (hasRecovery) {
-                    // abre o modal; o widget deteta recovery automaticamente via hash
-                    window.netlifyIdentity.open();
-                }
-            }
+      if (window.netlifyIdentity) {
+        // If we land on /admin/#recovery_token=... this helps the widget kick in
+        window.netlifyIdentity.on("init", (user) => {
+          console.log("[admin] identity init, user:", !!user, "hash:", window.location.hash);
 
-            function attachIdentityHandlers() {
-                window.netlifyIdentity.on("init", () => {
-                    console.log("[Admin] netlifyIdentity init");
-                    openIfRecovery();
-                });
-                window.netlifyIdentity.init();
-            }
+          // Force login modal if not logged in
+          if (!user) {
+            window.netlifyIdentity.open("login");
+          }
+        });
 
-            function waitForIdentityWidget(attemptsLeft) {
-                if (window.netlifyIdentity) {
-                    console.log("[Admin] netlifyIdentity available");
-                    attachIdentityHandlers();
-                    return;
-                }
-                if (attemptsLeft <= 0) {
-                    console.warn("[Admin] netlifyIdentity not available");
-                    return;
-                }
-                setTimeout(() => waitForIdentityWidget(attemptsLeft - 1), 50);
-            }
+        window.netlifyIdentity.on("login", () => {
+          console.log("[admin] logged in");
+          window.netlifyIdentity.close();
+        });
 
-            waitForIdentityWidget(100);
-        })();
+        window.netlifyIdentity.on("logout", () => {
+          console.log("[admin] logged out");
+          window.netlifyIdentity.open("login");
+        });
+      } else {
+        console.log("[admin] netlifyIdentity missing!");
+      }
     </script>
-
-</body>
-
+  </body>
 </html>
